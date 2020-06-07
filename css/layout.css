@@ -1,0 +1,24 @@
+#main-wrap {
+    transition: filter .4s linear;
+}
+
+#columns {
+    overflow: hidden;
+}
+#columns .column {
+    width: auto;
+    min-width: 33.3333%;
+    max-width: 100%;
+}
+#columns a.column + div{
+    width: 66.6666%;
+}
+
+#columns .column .content p {
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+}
+#columns .column * {
+    width: auto;
+}

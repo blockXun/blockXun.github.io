@@ -1,0 +1,44 @@
+<hr>
+<p>title: JS装饰器<br>date: 2019-12-18<br>tags: js<br>isTop: false</p>
+<hr>
+<p>JS装饰器【@】是ES7出现的新语法（typescript中也可以用），可以对一些对象进行包装，可包括的对象有class类、属性、方法等</p>
+<p><strong>装饰器功能现在处于提案过程中，使用时需要使用<code>babel</code>进行编译后才能执行<code>npm i --save-dev babel-plugin-transform-decorators-legacy</code></strong></p>
+<p><strong>下面例子是要在typescript实现的</strong></p>
+<h2 id="类-装饰器"><a href="#类-装饰器" class="headerlink" title="类 装饰器"></a>类 装饰器</h2><pre><code class="typescript"><span class="meta">@myDecorator</span>
+<span class="keyword">class</span> data { }
+
+<span class="function"><span class="keyword">function</span> <span class="title">myDecorator</span>(<span class="params">data</span>) </span>{ <span class="comment">// data代表着被装饰的类</span>
+   <span class="built_in">console</span>.log(data) <span class="comment">// class data {...}</span>
+  data.prototype.fun = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>{
+     <span class="built_in">console</span>.log(<span class="string">'创建的函数'</span>)
+  }
+}
+
+<span class="keyword">const</span> newData = <span class="keyword">new</span> data()
+<span class="built_in">console</span>.log(data) <span class="comment">// class data {...}</span>
+<span class="built_in">console</span>.log(newData) <span class="comment">// class data {...}</span>
+<span class="built_in">console</span>.log(newData.fun()) <span class="comment">// '创建的函数'</span></code></pre>
+<p><em>上例中<code>log</code>的<code>newData</code>和两个<code>data</code>，<code>console.log</code>出的都是<code>data</code>这个类</em></p>
+<p>也可以给装饰器添加一个或多个形参</p>
+<pre><code class="typescript"><span class="meta">@myDecorator</span>(<span class="string">'aa'</span>)
+<span class="keyword">class</span> data { }
+
+<span class="function"><span class="keyword">function</span> <span class="title">myDecorator</span>(<span class="params">text: <span class="built_in">string</span></span>) </span>{ <span class="comment">// text 为传入的值('aa')</span>
+    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">target: <span class="built_in">any</span></span>) </span>{ <span class="comment">// target 为 class data {...}</span>
+        target.prototype.fun = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>{
+            <span class="keyword">return</span> {text: text,target: target}
+        }
+    }
+}
+
+<span class="keyword">const</span> test:<span class="built_in">any</span> = <span class="keyword">new</span> data()
+<span class="built_in">console</span>.log(test) <span class="comment">// class data {...}</span>
+<span class="built_in">console</span>.log(test.fun()) <span class="comment">// { text: 'aa', target: class data {...} }</span></code></pre>
+<p>原理上相当于</p>
+<pre><code class="typescript"><span class="meta">@myDecorator</span>(<span class="string">'aa'</span>)
+<span class="keyword">class</span> data { }
+<span class="function"><span class="keyword">function</span> <span class="title">myDecorator</span> (<span class="params"></span>) </span>{...}
+<span class="comment">// 相当于</span>
+<span class="function"><span class="keyword">function</span> <span class="title">myDecorator</span> (<span class="params"></span>) </span>{...}
+myDecorator(<span class="string">'aa'</span>)(data)</code></pre>
+<h2 id="方法-装饰器"><a href="#方法-装饰器" class="headerlink" title="方法 装饰器"></a>方法 装饰器</h2><p>对class类中的方法进行封装，</p>
